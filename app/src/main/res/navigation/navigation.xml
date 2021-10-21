@@ -16,7 +16,7 @@
     <fragment
         android:id="@+id/walLetFragment"
         android:name="com.tsybulnik.testopti.WalletFragment"
-        android:label="Wallet"
+        android:label="@string/wallet"
         tools:layout="@layout/fragment_wallet" >
         <action
             android:id="@+id/action_walLetFragment_to_walletAddDealFragment"
@@ -25,7 +25,7 @@
     <fragment
         android:id="@+id/walletAddDealFragment"
         android:name="com.tsybulnik.testopti.WalletAddDealFragment"
-        android:label="fragment_wallet_add_deal"
+        android:label="@string/new_deal"
         tools:layout="@layout/fragment_wallet_add_deal" >
         <action
             android:id="@+id/action_walletAddDealFragment_to_walLetFragment"
