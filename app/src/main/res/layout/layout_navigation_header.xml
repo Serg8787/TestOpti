@@ -7,26 +7,29 @@
     android:id="@+id/root">
 
 
-    <ImageView
-        android:id="@+id/imageView"
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/ivPhotoHeader"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginTop="30dp"
+        android:scaleType="centerCrop"
+        android:background="@drawable/background_photo"
         android:src="@drawable/photo_nav_header"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:riv_oval="true"/>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvNameHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:gravity="center"
         android:text="Сергей \nЦыбульник"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintEnd_toEndOf="@+id/ivPhotoHeader"
+        app:layout_constraintStart_toStartOf="@+id/ivPhotoHeader"
+        app:layout_constraintTop_toBottomOf="@+id/ivPhotoHeader" />
 
 
     <ImageView
@@ -37,7 +40,7 @@
         android:src="@drawable/ic_star"
         app:layout_constraintEnd_toStartOf="@+id/textBall"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/tvNameHeader" />
 
     <TextView
         android:id="@+id/textBall"
@@ -47,7 +50,7 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivStar"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/tvNameHeader" />
 
     <View
         android:layout_width="match_parent"

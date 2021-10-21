@@ -16,9 +16,9 @@
     </fragment>
     <fragment
         android:id="@+id/walLetFragment"
-        android:name="com.tsybulnik.testopti.WalLetFragment"
+        android:name="com.tsybulnik.testopti.WalletFragment"
         android:label="Wallet"
-        tools:layout="@layout/fragment_wal_let" >
+        tools:layout="@layout/fragment_wallet" >
         <action
             android:id="@+id/action_walLetFragment_to_walletAddDealFragment"
             app:destination="@id/walletAddDealFragment" />
