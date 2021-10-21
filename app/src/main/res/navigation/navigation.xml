@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/mapBasicFragment">
+
+    <fragment
+        android:id="@+id/mapBasicFragment"
+        android:name="com.tsybulnik.testopti.MapBasicFragment"
+        android:label="fragment_map_basic"
+        tools:layout="@layout/fragment_map_basic" >
+        <action
+            android:id="@+id/action_mapBasicFragment_to_walLetFragment2"
+            app:destination="@id/walLetFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/walLetFragment"
+        android:name="com.tsybulnik.testopti.WalLetFragment"
+        android:label="Wallet"
+        tools:layout="@layout/fragment_wal_let" >
+        <action
+            android:id="@+id/action_walLetFragment_to_walletAddDealFragment"
+            app:destination="@id/walletAddDealFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/walletAddDealFragment"
+        android:name="com.tsybulnik.testopti.WalletAddDealFragment"
+        android:label="fragment_wallet_add_deal"
+        tools:layout="@layout/fragment_wallet_add_deal" >
+        <action
+            android:id="@+id/action_walletAddDealFragment_to_walLetFragment"
+            app:destination="@id/walLetFragment" />
+    </fragment>
+</navigation>
