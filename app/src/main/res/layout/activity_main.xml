@@ -27,6 +27,12 @@
                 android:layout_height="30dp"
                 android:src="@drawable/ic_menu"
                 android:contentDescription="@string/image_main_menu" />
+
+            <TextView
+                android:id="@+id/tvTittleHeader"
+                android:layout_width="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_height="wrap_content"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <fragment

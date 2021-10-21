@@ -64,10 +64,7 @@ public class WalletFragment extends Fragment {
        getView().findViewById(R.id.ivAddDeal).setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               navController.navigate(R.id.walletAddDealFragment);
-
-
-           }
+               navController.navigate(R.id.walletAddDealFragment);           }
        });
     }
 }

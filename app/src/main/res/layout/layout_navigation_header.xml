@@ -13,7 +13,6 @@
         android:layout_height="60dp"
         android:layout_marginTop="30dp"
         android:scaleType="centerCrop"
-        android:background="@drawable/background_photo"
         android:src="@drawable/photo_nav_header"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

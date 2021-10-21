@@ -8,7 +8,6 @@
     <fragment
         android:id="@+id/mapBasicFragment"
         android:name="com.tsybulnik.testopti.MapBasicFragment"
-        android:label="fragment_map_basic"
         tools:layout="@layout/fragment_map_basic" >
         <action
             android:id="@+id/action_mapBasicFragment_to_walLetFragment2"
