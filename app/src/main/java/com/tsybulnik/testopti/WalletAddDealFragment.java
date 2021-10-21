@@ -7,14 +7,20 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+
+import com.tsybulnik.testopti.database.DealsDatabase;
+import com.tsybulnik.testopti.model.Deal;
 
 import java.util.Calendar;
 
@@ -28,6 +34,8 @@ public class WalletAddDealFragment extends Fragment {
     TextView tvData;
     ArrayAdapter arrayAdapter;
     DatePickerDialog.OnDateSetListener listener;
+    Button btAddNewDeal;
+    private DealsDatabase database;
 
 
 
@@ -69,12 +77,22 @@ public class WalletAddDealFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
+        tvData = view.findViewById(R.id.tvData);
+        btAddNewDeal = view.findViewById(R.id.btAddNewDeal);
+        database = DealsDatabase.newInstance((Activity) getContext());
+
+        NavController navController = Navigation.findNavController((Activity) getContext(),R.id.navHostFragment);
+
+
         String[] itemsAutoComplete = {"Приход", "Расход"};
         arrayAdapter = new ArrayAdapter((Activity) getContext(),R.layout.drop_down_add,itemsAutoComplete);
 //        autoCompleteTextView.setText(arrayAdapter.getItem(0).toString(),false);
         autoCompleteTextView.setAdapter(arrayAdapter);
 
-        tvData = view.findViewById(R.id.tvData);
+
+
+
+
         Calendar calendar = Calendar.getInstance();
         final int year = calendar.get(Calendar.YEAR);
         final int months = calendar.get(Calendar.MONTH);
@@ -92,11 +110,19 @@ public class WalletAddDealFragment extends Fragment {
         listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
                 String data = day +"."+month+"."+year;
                 tvData.setText(data);
             }
         };
+
+        btAddNewDeal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Deal deal = new Deal("dsf",autoCompleteTextView.getText().toString(),"sdf",tvData.getText().toString());
+                database.dealDao().insert(deal);
+                navController.navigate(R.id.walLetFragment);
+            }
+        });
 
     }
 }
