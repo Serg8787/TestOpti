@@ -19,6 +19,7 @@
     <string name="add_new_deal">Добавить</string>
     <string name="data">Дата</string>
     <string name="sum">Сумма</string>
+    <string name="mup_api_key">AIzaSyCBktr6jm9k2OptyR1Py33l35dfr_3XAMU</string>
 
     <string-array name="arrival_expense">
         <item>Приход</item>

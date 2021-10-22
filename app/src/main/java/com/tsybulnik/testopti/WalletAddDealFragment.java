@@ -24,6 +24,8 @@ import com.tsybulnik.testopti.model.Deal;
 
 import java.util.Calendar;
 
+import kotlinx.coroutines.GlobalScope;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link WalletAddDealFragment#newInstance} factory method to
@@ -126,6 +128,8 @@ public class WalletAddDealFragment extends Fragment {
                     sum = "- " + etSum.getText().toString() + " ₴";
                 }
                 Deal deal = new Deal(nameTransaction, autoCompleteTextView.getText().toString(), sum, tvData.getText().toString());
+
+                
                 database.dealDao().insert(deal);
                 navController.navigate(R.id.walLetFragment);
             }
