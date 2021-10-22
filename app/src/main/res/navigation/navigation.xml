@@ -3,16 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/mapBasicFragment">
+    app:startDestination="@id/mapsFragment">
 
-    <fragment
-        android:id="@+id/mapBasicFragment"
-        android:name="com.tsybulnik.testopti.MapBasicFragment"
-        tools:layout="@layout/fragment_map_basic" >
-        <action
-            android:id="@+id/action_mapBasicFragment_to_walLetFragment2"
-            app:destination="@id/walLetFragment" />
-    </fragment>
     <fragment
         android:id="@+id/walLetFragment"
         android:name="com.tsybulnik.testopti.WalletFragment"
@@ -29,6 +21,14 @@
         tools:layout="@layout/fragment_wallet_add_deal" >
         <action
             android:id="@+id/action_walletAddDealFragment_to_walLetFragment"
+            app:destination="@id/walLetFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.tsybulnik.testopti.MapsFragment"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment2_to_walLetFragment"
             app:destination="@id/walLetFragment" />
     </fragment>
 </navigation>
