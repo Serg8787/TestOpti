@@ -3,13 +3,6 @@ package com.tsybulnik.testopti;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +10,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.tsybulnik.testopti.database.DealsDatabase;
 import com.tsybulnik.testopti.model.Deal;
@@ -32,11 +32,12 @@ import java.util.Calendar;
 public class WalletAddDealFragment extends Fragment {
     AutoCompleteTextView autoCompleteTextView;
     TextView tvData;
+    EditText etNameTransaction;
+    EditText etSum;
     ArrayAdapter arrayAdapter;
     DatePickerDialog.OnDateSetListener listener;
     Button btAddNewDeal;
     private DealsDatabase database;
-
 
 
     // TODO: Rename and change types of parameters
@@ -62,7 +63,7 @@ public class WalletAddDealFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       }
+    }
 
 
     @Override
@@ -78,19 +79,18 @@ public class WalletAddDealFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
         tvData = view.findViewById(R.id.tvData);
+        etNameTransaction = view.findViewById(R.id.etNameTransaction);
+        etSum = view.findViewById(R.id.etSum);
         btAddNewDeal = view.findViewById(R.id.btAddNewDeal);
         database = DealsDatabase.newInstance((Activity) getContext());
 
-        NavController navController = Navigation.findNavController((Activity) getContext(),R.id.navHostFragment);
+        NavController navController = Navigation.findNavController((Activity) getContext(), R.id.navHostFragment);
 
 
         String[] itemsAutoComplete = {"Приход", "Расход"};
-        arrayAdapter = new ArrayAdapter((Activity) getContext(),R.layout.drop_down_add,itemsAutoComplete);
+        arrayAdapter = new ArrayAdapter((Activity) getContext(), R.layout.drop_down_add, itemsAutoComplete);
 //        autoCompleteTextView.setText(arrayAdapter.getItem(0).toString(),false);
         autoCompleteTextView.setAdapter(arrayAdapter);
-
-
-
 
 
         Calendar calendar = Calendar.getInstance();
@@ -102,7 +102,7 @@ public class WalletAddDealFragment extends Fragment {
             public void onClick(View v) {
                 DatePickerDialog datePickerDialog = new DatePickerDialog((Activity) getContext(),
                         R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Picker_Date_Calendar,
-                        listener,year,months,day);
+                        listener, year, months, day);
                 datePickerDialog.show();
             }
         });
@@ -110,7 +110,7 @@ public class WalletAddDealFragment extends Fragment {
         listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String data = day +"."+month+"."+year;
+                String data = day + "." + month + "." + year;
                 tvData.setText(data);
             }
         };
@@ -118,7 +118,14 @@ public class WalletAddDealFragment extends Fragment {
         btAddNewDeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Deal deal = new Deal("dsf",autoCompleteTextView.getText().toString(),"sdf",tvData.getText().toString());
+                String sum = "";
+                String nameTransaction = etNameTransaction.getText().toString();
+                if (autoCompleteTextView.getText().toString().equals("Расход")) {
+                    sum = "+ " + etSum.getText().toString() + " ₴";
+                } else {
+                    sum = "- " + etSum.getText().toString() + " ₴";
+                }
+                Deal deal = new Deal(nameTransaction, autoCompleteTextView.getText().toString(), sum, tvData.getText().toString());
                 database.dealDao().insert(deal);
                 navController.navigate(R.id.walLetFragment);
             }

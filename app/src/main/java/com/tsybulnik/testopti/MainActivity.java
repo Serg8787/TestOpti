@@ -19,10 +19,12 @@ import android.widget.TextView;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
+    private ViewModelDeal viewModelDeal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
 

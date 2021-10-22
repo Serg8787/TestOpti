@@ -17,6 +17,8 @@
     <string name="wallet">Кошелек</string>
     <string name="new_deal">Новая сделка</string>
     <string name="add_new_deal">Добавить</string>
+    <string name="data">Дата</string>
+    <string name="sum">Сумма</string>
 
     <string-array name="arrival_expense">
         <item>Приход</item>

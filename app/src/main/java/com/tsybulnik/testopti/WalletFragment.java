@@ -7,19 +7,39 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.tsybulnik.testopti.adapter.DealAdapter;
+import com.tsybulnik.testopti.database.DealsDatabase;
+import com.tsybulnik.testopti.model.Deal;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link WalletFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WalletFragment extends Fragment {
+public class WalletFragment extends Fragment implements LifecycleOwner {
+    private RecyclerView recyclerViewDeals;
+    private DealAdapter dealAdapter;
+    private ViewModelDeal viewModelDeal;
+    List<Deal> dealsList = new ArrayList();
+    public static DealsDatabase database;
+
 
 
     public WalletFragment() {
@@ -58,7 +78,19 @@ public class WalletFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+
         NavController navController = Navigation.findNavController((Activity) getContext(),R.id.navHostFragment);
+        viewModelDeal = new ViewModelProvider(this).get(ViewModelDeal.class);
+        database = DealsDatabase.newInstance((Activity) getContext());
+        dealsList = database.dealDao().getAll();
+
+        recyclerViewDeals = view.findViewById(R.id.rvDeals);
+        // создаем адаптер
+        dealAdapter = new DealAdapter((Activity) getContext(),dealsList);
+        // устанавливаем для списка адаптер
+        recyclerViewDeals.setAdapter(dealAdapter);
+
 
 
        getView().findViewById(R.id.ivAddDeal).setOnClickListener(new View.OnClickListener() {
@@ -66,5 +98,8 @@ public class WalletFragment extends Fragment {
            public void onClick(View v) {
                navController.navigate(R.id.walletAddDealFragment);           }
        });
+
+
     }
+
 }
