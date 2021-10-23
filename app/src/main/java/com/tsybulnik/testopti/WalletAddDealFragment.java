@@ -1,7 +1,6 @@
 package com.tsybulnik.testopti;
 
 import android.app.Activity;
-import android.app.Application;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +12,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,14 +24,8 @@ import com.tsybulnik.testopti.database.DealsDatabase;
 import com.tsybulnik.testopti.model.Deal;
 
 import java.util.Calendar;
-import java.util.concurrent.Callable;
 
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import kotlinx.coroutines.GlobalScope;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -96,9 +90,9 @@ public class WalletAddDealFragment extends Fragment {
         NavController navController = Navigation.findNavController((Activity) getContext(), R.id.navHostFragment);
 
 
-        String[] itemsAutoComplete = {"Приход", "Расход"};
+        String[] itemsAutoComplete = {getString(R.string.income), getString(R.string.rashod)};
         arrayAdapter = new ArrayAdapter((Activity) getContext(), R.layout.drop_down_add, itemsAutoComplete);
-//        autoCompleteTextView.setText(arrayAdapter.getItem(0).toString(),false);
+        autoCompleteTextView.setText(arrayAdapter.getItem(0).toString(),false);
         autoCompleteTextView.setAdapter(arrayAdapter);
 
 
@@ -124,21 +118,31 @@ public class WalletAddDealFragment extends Fragment {
             }
         };
 
-        // Надо сделать проверку на null и на Empty
-
         btAddNewDeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String sum = "";
-                String nameTransaction = etNameTransaction.getText().toString();
-                if (autoCompleteTextView.getText().toString().equals("Приход")) {
-                    sum = "+ " + etSum.getText().toString() + " ₴";
+                if (  !etNameTransaction.getText().toString().isEmpty() &&
+                      !tvData.getText().toString().isEmpty() &&
+                      !autoCompleteTextView.getText().toString().isEmpty() &&
+                      !etSum.getText().toString().isEmpty() &&
+                      etNameTransaction.getText() != null &&
+                      autoCompleteTextView.getText() != null &&
+                      tvData.getText() != null&&
+                      etSum.getText() != null) {
+                    String sum = "";
+                    String nameTransaction = etNameTransaction.getText().toString();
+                    if (autoCompleteTextView.getText().toString().equals(R.string.income)) {
+                        sum = "+ " + etSum.getText().toString() + " ₴";
+                    } else {
+                        sum = "- " + etSum.getText().toString() + " ₴";
+                    }
+                    Deal deal = new Deal(nameTransaction, autoCompleteTextView.getText().toString(), sum, tvData.getText().toString());
+                    database.dealDao().insert(deal).subscribeOn(Schedulers.io()).subscribe();
+                    navController.navigate(R.id.walLetFragment);
                 } else {
-                    sum = "- " + etSum.getText().toString() + " ₴";
+                    Toast.makeText((Activity) getContext(), "Заполните все поля", Toast.LENGTH_LONG).show();
                 }
-                Deal deal = new Deal(nameTransaction, autoCompleteTextView.getText().toString(), sum, tvData.getText().toString());
-                database.dealDao().insert(deal).subscribeOn(Schedulers.io()).subscribe();
-                navController.navigate(R.id.walLetFragment);
+
             }
         });
 

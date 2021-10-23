@@ -42,12 +42,13 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView,navController);
 
         TextView textView = findViewById(R.id.tvTittleHeader);
+        ImageView imageView = findViewById(R.id.imageMenu);
 
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
                textView.setText(destination.getLabel());
-               // Добавить изменение иконки в хедер
+
             }
         });
     }

@@ -87,7 +87,6 @@ public class WalletFragment extends Fragment implements LifecycleOwner {
                     }
                 });
 
-
         getView().findViewById(R.id.ivAddDeal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
