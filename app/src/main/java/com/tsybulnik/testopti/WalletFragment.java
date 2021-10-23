@@ -75,7 +75,6 @@ public class WalletFragment extends Fragment implements LifecycleOwner {
         super.onViewCreated(view, savedInstanceState);
         recyclerViewDeals = view.findViewById(R.id.rvDeals);
 
-
         NavController navController = Navigation.findNavController((Activity) getContext(), R.id.navHostFragment);
         database = DealsDatabase.newInstance((Activity) getContext());
         database.dealDao().getAll()

@@ -137,22 +137,7 @@ public class WalletAddDealFragment extends Fragment {
                     sum = "- " + etSum.getText().toString() + " ₴";
                 }
                 Deal deal = new Deal(nameTransaction, autoCompleteTextView.getText().toString(), sum, tvData.getText().toString());
-
-//                Observable.fromCallable(() -> database.dealDao().insert(deal))
-//                        .subscribeOn(Schedulers.io()).subscribe();
-
-                database.dealDao().insert(deal).subscribeOn(Schedulers.io()).subscribe(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        // success
-                    }
-                }, new Consumer< Throwable >() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        // error
-                    }
-                });
-
+                database.dealDao().insert(deal).subscribeOn(Schedulers.io()).subscribe();
                 navController.navigate(R.id.walLetFragment);
             }
         });
