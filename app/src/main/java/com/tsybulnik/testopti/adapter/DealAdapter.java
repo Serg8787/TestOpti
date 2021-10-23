@@ -37,10 +37,10 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Deal deal = dealList.get(position);
         if(deal.getAutoComplete().equals("Расход")){
-            holder.tvItemSum.setTextColor(Color.DKGRAY);
+            holder.tvItemSum.setTextColor(Color.GREEN);
             holder.ivIncomeExpense.setImageResource(R.drawable.icons8_expense);
         } else {
-            holder.tvItemSum.setTextColor(Color.GREEN);
+            holder.tvItemSum.setTextColor(Color.DKGRAY);
             holder.ivIncomeExpense.setImageResource(R.drawable.icons8_income);
         }
         holder.tvItemSum.setText(deal.getSum());

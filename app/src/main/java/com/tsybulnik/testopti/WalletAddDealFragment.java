@@ -131,7 +131,7 @@ public class WalletAddDealFragment extends Fragment {
             public void onClick(View v) {
                 String sum = "";
                 String nameTransaction = etNameTransaction.getText().toString();
-                if (autoCompleteTextView.getText().toString().equals("Расход")) {
+                if (autoCompleteTextView.getText().toString().equals("Приход")) {
                     sum = "+ " + etSum.getText().toString() + " ₴";
                 } else {
                     sum = "- " + etSum.getText().toString() + " ₴";
