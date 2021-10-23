@@ -8,11 +8,16 @@ import androidx.room.Query;
 import com.tsybulnik.testopti.model.Deal;
 
 import java.util.List;
+
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+
 @Dao
 public interface DealDao {
     @Query("SELECT * FROM deals")
-    List<Deal> getAll();
+    Flowable<List<Deal>> getAll();
+
 
     @Insert
-    void insert(Deal deal);
+    Completable insert(final Deal deal);
 }

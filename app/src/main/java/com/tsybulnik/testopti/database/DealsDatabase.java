@@ -17,7 +17,7 @@ public abstract class DealsDatabase extends RoomDatabase {
     public static DealsDatabase newInstance(Context context){
         synchronized (LOCK){
             if(database==null){
-                database = Room.databaseBuilder(context,DealsDatabase.class,DB_NAME).allowMainThreadQueries().build();
+                database = Room.databaseBuilder(context,DealsDatabase.class,DB_NAME).build();
             }
             return database;
         }

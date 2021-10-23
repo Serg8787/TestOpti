@@ -1,6 +1,7 @@
 package com.tsybulnik.testopti;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,7 +24,13 @@ import com.tsybulnik.testopti.database.DealsDatabase;
 import com.tsybulnik.testopti.model.Deal;
 
 import java.util.Calendar;
+import java.util.concurrent.Callable;
 
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import kotlinx.coroutines.GlobalScope;
 
 /**
@@ -117,6 +124,8 @@ public class WalletAddDealFragment extends Fragment {
             }
         };
 
+        // Надо сделать проверку на null и на Empty
+
         btAddNewDeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,8 +138,21 @@ public class WalletAddDealFragment extends Fragment {
                 }
                 Deal deal = new Deal(nameTransaction, autoCompleteTextView.getText().toString(), sum, tvData.getText().toString());
 
-                
-                database.dealDao().insert(deal);
+//                Observable.fromCallable(() -> database.dealDao().insert(deal))
+//                        .subscribeOn(Schedulers.io()).subscribe();
+
+                database.dealDao().insert(deal).subscribeOn(Schedulers.io()).subscribe(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        // success
+                    }
+                }, new Consumer< Throwable >() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        // error
+                    }
+                });
+
                 navController.navigate(R.id.walLetFragment);
             }
         });

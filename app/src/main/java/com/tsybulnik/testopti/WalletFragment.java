@@ -1,24 +1,20 @@
 package com.tsybulnik.testopti;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.view.GravityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.tsybulnik.testopti.adapter.DealAdapter;
 import com.tsybulnik.testopti.database.DealsDatabase;
@@ -26,7 +22,9 @@ import com.tsybulnik.testopti.model.Deal;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,10 +34,8 @@ import java.util.Objects;
 public class WalletFragment extends Fragment implements LifecycleOwner {
     private RecyclerView recyclerViewDeals;
     private DealAdapter dealAdapter;
-    private ViewModelDeal viewModelDeal;
     List<Deal> dealsList = new ArrayList();
     public static DealsDatabase database;
-
 
 
     public WalletFragment() {
@@ -77,27 +73,28 @@ public class WalletFragment extends Fragment implements LifecycleOwner {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
-
-        NavController navController = Navigation.findNavController((Activity) getContext(),R.id.navHostFragment);
-        viewModelDeal = new ViewModelProvider(this).get(ViewModelDeal.class);
-        database = DealsDatabase.newInstance((Activity) getContext());
-        dealsList = database.dealDao().getAll();
-
         recyclerViewDeals = view.findViewById(R.id.rvDeals);
-        // создаем адаптер
-        dealAdapter = new DealAdapter((Activity) getContext(),dealsList);
-        // устанавливаем для списка адаптер
-        recyclerViewDeals.setAdapter(dealAdapter);
 
 
+        NavController navController = Navigation.findNavController((Activity) getContext(), R.id.navHostFragment);
+        database = DealsDatabase.newInstance((Activity) getContext());
+        database.dealDao().getAll()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Deal>>() {
+                    @Override
+                    public void accept(List<Deal> dealList) throws Exception {
+                        dealAdapter = new DealAdapter((Activity) getContext(), dealList);
+                        recyclerViewDeals.setAdapter(dealAdapter);
+                    }
+                });
 
-       getView().findViewById(R.id.ivAddDeal).setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               navController.navigate(R.id.walletAddDealFragment);           }
-       });
+
+        getView().findViewById(R.id.ivAddDeal).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.walletAddDealFragment);
+            }
+        });
 
 
     }
