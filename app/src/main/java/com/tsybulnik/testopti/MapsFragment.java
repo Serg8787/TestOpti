@@ -1,47 +1,41 @@
 package com.tsybulnik.testopti;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
+public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
-public class MapsFragment extends Fragment {
-    FusedLocationProviderClient client;
-    SupportMapFragment mapFragment;
-    ImageView ivZoomMap;
+    GoogleMap mMap;
+    LocationManager locationManager;
+    android.location.LocationListener locationListener;
+    LatLng mylatLng;
+
 
     @Nullable
     @Override
@@ -54,50 +48,56 @@ public class MapsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ivZoomMap = view.findViewById(R.id.ivZoomMap);
-        
-
-        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        client = LocationServices.getFusedLocationProviderClient((Activity) getContext());
-    }
-    private void getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission((Activity) getContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission((Activity) getContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            getCurrentLocation();
-        } else {
-            ActivityCompat.requestPermissions((Activity) getContext(),
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
-
-        }
-        Task<Location> task = client.getLastLocation();
-        task.addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-           if(location!=null){
-               mapFragment.getMapAsync(new OnMapReadyCallback() {
-                   @Override
-                   public void onMapReady(@NonNull GoogleMap googleMap) {
-                       LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
-                       MarkerOptions markerOptions = new MarkerOptions().position(latLng)
-                               .title("MY_GPS");
-                       googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
-                       googleMap.addMarker(markerOptions);
-                   }
-               });
-           }
-            }
-        });
+        SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        supportMapFragment.getMapAsync(this::onMapReady);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-      if(requestCode==100){
-          if(grantResults.length>0 && grantResults[0]==
-          PackageManager.PERMISSION_GRANTED){
-              getCurrentLocation();
-          }
-      }
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        mMap = googleMap;
+        locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                mylatLng = new LatLng(-19, 151);
+                mMap.clear();
+                mMap.addMarker(new MarkerOptions().position(mylatLng).title("My_GPS"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(mylatLng));
+            }
+        };
+        askLocationPermissin();
+    }
+
+    private void askLocationPermissin() {
+        Dexter.withContext(getContext()).withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
+                        if (ActivityCompat.checkSelfPermission(getContext(),
+                                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                                && ActivityCompat.checkSelfPermission(getContext(),
+                                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                            return;
+                        }
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                                0, 0,
+                                (android.location.LocationListener) locationListener);
+
+                        Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        mylatLng = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+                        mMap.clear();
+                        mMap.addMarker(new MarkerOptions().position(mylatLng).title("My_GPS"));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(mylatLng));
+                    }
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+
+                    }
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
+                        permissionToken.continuePermissionRequest();
+                    }
+                }).check();
     }
 }

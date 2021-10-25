@@ -64,4 +64,8 @@ dependencies {
     implementation 'androidx.room:room-rxjava2:2.2.2'
 
 
+    // Permission
+    implementation 'com.karumi:dexter:6.2.3'
+
+
 }
