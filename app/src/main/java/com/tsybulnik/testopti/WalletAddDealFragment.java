@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -41,6 +42,7 @@ public class WalletAddDealFragment extends Fragment {
     DatePickerDialog.OnDateSetListener listener;
     Button btAddNewDeal;
     private DealsDatabase database;
+    private WalletViewModel viewModel;
 
 
     // TODO: Rename and change types of parameters
@@ -88,6 +90,7 @@ public class WalletAddDealFragment extends Fragment {
         database = DealsDatabase.newInstance((Activity) getContext());
 
         NavController navController = Navigation.findNavController((Activity) getContext(), R.id.navHostFragment);
+        viewModel = new ViewModelProvider(requireActivity()).get(WalletViewModel.class);
 
 
         String[] itemsAutoComplete = {getString(R.string.income), getString(R.string.rashod)};
@@ -137,7 +140,9 @@ public class WalletAddDealFragment extends Fragment {
                         sum = "- " + etSum.getText().toString() + " ₴";
                     }
                     Deal deal = new Deal(nameTransaction, autoCompleteTextView.getText().toString(), sum, tvData.getText().toString());
-                    database.dealDao().insert(deal).subscribeOn(Schedulers.io()).subscribe();
+//                    database.dealDao().insert(deal).subscribeOn(Schedulers.io()).subscribe();
+
+                    viewModel.insert(deal);
                     navController.navigate(R.id.walLetFragment);
                 } else {
                     Toast.makeText((Activity) getContext(), "Заполните все поля", Toast.LENGTH_LONG).show();

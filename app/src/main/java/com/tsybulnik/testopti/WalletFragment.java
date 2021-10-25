@@ -3,15 +3,16 @@ package com.tsybulnik.testopti;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +37,7 @@ public class WalletFragment extends Fragment implements LifecycleOwner {
     private DealAdapter dealAdapter;
     List<Deal> dealsList = new ArrayList();
     public static DealsDatabase database;
+    private WalletViewModel viewModel;
 
 
     public WalletFragment() {
@@ -70,6 +72,7 @@ public class WalletFragment extends Fragment implements LifecycleOwner {
         return inflater.inflate(R.layout.fragment_wallet, container, false);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -77,15 +80,16 @@ public class WalletFragment extends Fragment implements LifecycleOwner {
 
         NavController navController = Navigation.findNavController((Activity) getContext(), R.id.navHostFragment);
         database = DealsDatabase.newInstance((Activity) getContext());
-        database.dealDao().getAll()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<Deal>>() {
-                    @Override
-                    public void accept(List<Deal> dealList) throws Exception {
-                        dealAdapter = new DealAdapter((Activity) getContext(), dealList);
-                        recyclerViewDeals.setAdapter(dealAdapter);
-                    }
-                });
+
+        viewModel = new ViewModelProvider(requireActivity()).get(WalletViewModel.class);
+        viewModel.getList().subscribeOn(Schedulers.computation()).
+                observeOn(AndroidSchedulers.mainThread()).observeOn(AndroidSchedulers.mainThread()).
+                subscribe(dealList -> {
+                    dealAdapter = new DealAdapter((Activity) getContext(), dealList);
+                    recyclerViewDeals.setAdapter(dealAdapter);
+
+                }, e ->
+                        Toast.makeText(getContext(), "fsdf", Toast.LENGTH_LONG).show());
 
         getView().findViewById(R.id.ivAddDeal).setOnClickListener(new View.OnClickListener() {
             @Override
