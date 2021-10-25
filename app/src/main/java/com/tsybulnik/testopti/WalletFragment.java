@@ -79,7 +79,7 @@ public class WalletFragment extends Fragment implements LifecycleOwner {
         recyclerViewDeals = view.findViewById(R.id.rvDeals);
 
         NavController navController = Navigation.findNavController((Activity) getContext(), R.id.navHostFragment);
-        database = DealsDatabase.newInstance((Activity) getContext());
+        database = DealsDatabase.newInstance(getContext());
 
         viewModel = new ViewModelProvider(requireActivity()).get(WalletViewModel.class);
         viewModel.getList().subscribeOn(Schedulers.computation()).
@@ -97,8 +97,5 @@ public class WalletFragment extends Fragment implements LifecycleOwner {
                 navController.navigate(R.id.walletAddDealFragment);
             }
         });
-
-
     }
-
 }

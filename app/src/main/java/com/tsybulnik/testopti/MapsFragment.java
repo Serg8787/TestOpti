@@ -55,7 +55,7 @@ public class MapsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ivZoomMap = view.findViewById(R.id.ivZoomMap);
-
+        
 
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         client = LocationServices.getFusedLocationProviderClient((Activity) getContext());
