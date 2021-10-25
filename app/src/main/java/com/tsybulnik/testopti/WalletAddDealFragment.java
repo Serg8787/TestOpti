@@ -131,7 +131,6 @@ public class WalletAddDealFragment extends Fragment {
                         etSum.getText() != null) {
                     String sum = "";
                     String nameTransaction = etNameTransaction.getText().toString();
-                     // autoCompleteTextView.getText не сравнивает строки, нужно сравнивать текст по выбранной позиции в адапторе
                     if (autoCompleteTextView.getText().toString().equals("Приход")) {
                         sum = "+ " + etSum.getText().toString() + " ₴";
                     } else  {
