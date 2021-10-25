@@ -26,8 +26,6 @@ import com.tsybulnik.testopti.model.Deal;
 
 import java.util.Calendar;
 
-import io.reactivex.schedulers.Schedulers;
-
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link WalletAddDealFragment#newInstance} factory method to
@@ -41,7 +39,6 @@ public class WalletAddDealFragment extends Fragment {
     ArrayAdapter arrayAdapter;
     DatePickerDialog.OnDateSetListener listener;
     Button btAddNewDeal;
-    private DealsDatabase database;
     private WalletViewModel viewModel;
 
 
@@ -87,15 +84,15 @@ public class WalletAddDealFragment extends Fragment {
         etNameTransaction = view.findViewById(R.id.etNameTransaction);
         etSum = view.findViewById(R.id.etSum);
         btAddNewDeal = view.findViewById(R.id.btAddNewDeal);
-        database = DealsDatabase.newInstance((Activity) getContext());
+        DealsDatabase database = DealsDatabase.newInstance((Activity) getContext());
 
         NavController navController = Navigation.findNavController((Activity) getContext(), R.id.navHostFragment);
         viewModel = new ViewModelProvider(requireActivity()).get(WalletViewModel.class);
 
 
         String[] itemsAutoComplete = {getString(R.string.income), getString(R.string.rashod)};
-        arrayAdapter = new ArrayAdapter((Activity) getContext(), R.layout.drop_down_add, itemsAutoComplete);
-        autoCompleteTextView.setText(arrayAdapter.getItem(0).toString(),false);
+        arrayAdapter = new ArrayAdapter( getContext(), R.layout.support_simple_spinner_dropdown_item, itemsAutoComplete);
+        autoCompleteTextView.setText(arrayAdapter.getItem(0).toString(), false);
         autoCompleteTextView.setAdapter(arrayAdapter);
 
 
@@ -124,28 +121,30 @@ public class WalletAddDealFragment extends Fragment {
         btAddNewDeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (  !etNameTransaction.getText().toString().isEmpty() &&
-                      !tvData.getText().toString().isEmpty() &&
-                      !autoCompleteTextView.getText().toString().isEmpty() &&
-                      !etSum.getText().toString().isEmpty() &&
-                      etNameTransaction.getText() != null &&
-                      autoCompleteTextView.getText() != null &&
-                      tvData.getText() != null&&
-                      etSum.getText() != null) {
+                if (!etNameTransaction.getText().toString().isEmpty() &&
+                        !tvData.getText().toString().isEmpty() &&
+                        !autoCompleteTextView.getText().toString().isEmpty() &&
+                        !etSum.getText().toString().isEmpty() &&
+                        etNameTransaction.getText() != null &&
+                        autoCompleteTextView.getText() != null &&
+                        tvData.getText() != null &&
+                        etSum.getText() != null) {
                     String sum = "";
                     String nameTransaction = etNameTransaction.getText().toString();
-                    if (autoCompleteTextView.getText().toString().equals(R.string.income)) {
+                     // autoCompleteTextView.getText не сравнивает строки, нужно сравнивать текст по выбранной позиции в адапторе
+                    if (autoCompleteTextView.getText().toString().equals("Приход")) {
                         sum = "+ " + etSum.getText().toString() + " ₴";
-                    } else {
+                    } else  {
                         sum = "- " + etSum.getText().toString() + " ₴";
                     }
                     Deal deal = new Deal(nameTransaction, autoCompleteTextView.getText().toString(), sum, tvData.getText().toString());
+                    // Без viewModel
 //                    database.dealDao().insert(deal).subscribeOn(Schedulers.io()).subscribe();
 
                     viewModel.insert(deal);
                     navController.navigate(R.id.walLetFragment);
                 } else {
-                    Toast.makeText((Activity) getContext(), "Заполните все поля", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Заполните все поля", Toast.LENGTH_LONG).show();
                 }
 
             }

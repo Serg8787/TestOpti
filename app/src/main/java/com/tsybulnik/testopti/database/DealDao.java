@@ -21,6 +21,5 @@ public interface DealDao {
     @Insert
     Completable insert(final Deal deal);
 
-    @Insert
-    long addData(Deal deal);
+
 }

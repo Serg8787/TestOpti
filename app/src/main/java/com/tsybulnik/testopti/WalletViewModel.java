@@ -10,7 +10,6 @@ import com.tsybulnik.testopti.model.Deal;
 import java.util.List;
 
 import io.reactivex.Flowable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class WalletViewModel extends AndroidViewModel{
@@ -27,7 +26,7 @@ public class WalletViewModel extends AndroidViewModel{
         return dealsDatabase.dealDao().getAll();
     }
 
-    Disposable insert(Deal deal){
-        return  dealsDatabase.dealDao().insert(deal).subscribeOn(Schedulers.io()).subscribe();
+    void insert(Deal deal){
+        dealsDatabase.dealDao().insert(deal).subscribeOn(Schedulers.io()).subscribe();
     }
 }

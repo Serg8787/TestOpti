@@ -89,7 +89,7 @@ public class WalletFragment extends Fragment implements LifecycleOwner {
                     recyclerViewDeals.setAdapter(dealAdapter);
 
                 }, e ->
-                        Toast.makeText(getContext(), "fsdf", Toast.LENGTH_LONG).show());
+                        Toast.makeText(getContext(), "Ошибка загрузки данных", Toast.LENGTH_LONG).show());
 
         getView().findViewById(R.id.ivAddDeal).setOnClickListener(new View.OnClickListener() {
             @Override
