@@ -59,10 +59,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
-                mylatLng = new LatLng(-19, 151);
-                mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(mylatLng).title("My_GPS"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(mylatLng));
+//                mylatLng = new LatLng(-34, 151);
+//                mMap.clear();
+//                mMap.addMarker(new MarkerOptions().position(mylatLng).title("My_GPS"));
+//                mMap.moveCamera(CameraUpdateFactory.newLatLng(mylatLng));
             }
         };
         askLocationPermissin();
