@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +36,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     LocationManager locationManager;
     android.location.LocationListener locationListener;
     LatLng mylatLng;
+    ImageView ivZoomMap;
 
 
     @Nullable
@@ -50,6 +52,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         supportMapFragment.getMapAsync(this::onMapReady);
+        ivZoomMap = view.findViewById(R.id.ivZoomMap);
+        ivZoomMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                askLocationPermissin();
+            }
+        });
+
+
     }
 
     @Override
@@ -84,6 +95,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                                 0, 0,
                                 (android.location.LocationListener) locationListener);
 
+
                         Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                         mylatLng = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
                         mMap.clear();
@@ -100,4 +112,5 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                     }
                 }).check();
     }
+
 }
