@@ -22,6 +22,7 @@
     <string name="map_api_key">AIzaSyCBktr6jm9k2OptyR1Py33l35dfr_3XAMU</string>
     <string name="income">Приход</string>
     <string name="rashod">Расход</string>
+    <string name="no_gps">Данные GPS не загружены</string>
 
     <string-array name="arrival_expense">
         <item>Приход</item>

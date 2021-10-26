@@ -35,9 +35,9 @@ import io.reactivex.schedulers.Schedulers;
 public class WalletFragment extends Fragment implements LifecycleOwner {
     private RecyclerView recyclerViewDeals;
     private DealAdapter dealAdapter;
-    List<Deal> dealsList = new ArrayList();
     public static DealsDatabase database;
     private WalletViewModel viewModel;
+    NavController navController;
 
 
     public WalletFragment() {
@@ -62,6 +62,7 @@ public class WalletFragment extends Fragment implements LifecycleOwner {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    navController  = Navigation.findNavController((Activity) getContext(), R.id.navHostFragment);
 
     }
 
@@ -78,23 +79,24 @@ public class WalletFragment extends Fragment implements LifecycleOwner {
         super.onViewCreated(view, savedInstanceState);
         recyclerViewDeals = view.findViewById(R.id.rvDeals);
 
-        NavController navController = Navigation.findNavController((Activity) getContext(), R.id.navHostFragment);
+
         database = DealsDatabase.newInstance(getContext());
 
         viewModel = new ViewModelProvider(requireActivity()).get(WalletViewModel.class);
         viewModel.getList().subscribeOn(Schedulers.computation()).
                 observeOn(AndroidSchedulers.mainThread()).observeOn(AndroidSchedulers.mainThread()).
                 subscribe(dealList -> {
-                    dealAdapter = new DealAdapter((Activity) getContext(), dealList);
+                    dealAdapter = new DealAdapter(view.getContext(), dealList);
                     recyclerViewDeals.setAdapter(dealAdapter);
 
                 }, e ->
                         Toast.makeText(getContext(), "Ошибка загрузки данных", Toast.LENGTH_LONG).show());
 
+
         getView().findViewById(R.id.ivAddDeal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navController.navigate(R.id.walletAddDealFragment);
+                navController.navigate(R.id.action_walLetFragment_to_walletAddDealFragment);
             }
         });
     }

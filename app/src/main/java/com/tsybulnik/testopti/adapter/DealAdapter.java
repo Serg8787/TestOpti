@@ -1,5 +1,7 @@
 package com.tsybulnik.testopti.adapter;
 
+import static android.view.LayoutInflater.from;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -22,7 +24,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.ViewHolder>{
     private List<Deal> dealList;
     public DealAdapter(Context context, List<Deal> dealList) {
         this.dealList = dealList;
-        this.inflater = LayoutInflater.from(context);
+        this.inflater = from(context);
     }
 
     @NonNull

@@ -7,6 +7,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,9 +72,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onLocationChanged(@NonNull Location location) {
 //                mylatLng = new LatLng(-34, 151);
-//                mMap.clear();
-//                mMap.addMarker(new MarkerOptions().position(mylatLng).title("My_GPS"));
-//                mMap.moveCamera(CameraUpdateFactory.newLatLng(mylatLng));
+                mMap.clear();
+                mMap.addMarker(new MarkerOptions().position(mylatLng).title("My_GPS"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(mylatLng));
             }
         };
         askLocationPermissin();
@@ -93,14 +94,19 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                         }
                         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                                 0, 0,
-                                (android.location.LocationListener) locationListener);
+                                (LocationListener) locationListener);
 
 
                         Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        mylatLng = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-                        mMap.clear();
-                        mMap.addMarker(new MarkerOptions().position(mylatLng).title("My_GPS"));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(mylatLng));
+                        if(lastLocation!=null){
+                            mylatLng = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+                            mMap.clear();
+                            mMap.addMarker(new MarkerOptions().position(mylatLng).title("My_GPS"));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(mylatLng));
+                        } else {
+                            Log.d("MyLog",getString(R.string.no_gps));
+                        }
+
                     }
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {

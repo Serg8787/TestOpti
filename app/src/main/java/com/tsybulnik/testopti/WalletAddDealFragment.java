@@ -141,7 +141,7 @@ public class WalletAddDealFragment extends Fragment {
 //                    database.dealDao().insert(deal).subscribeOn(Schedulers.io()).subscribe();
 
                     viewModel.insert(deal);
-                    navController.navigate(R.id.walLetFragment);
+                    navController.navigate(R.id.action_walletAddDealFragment_to_walLetFragment);
                 } else {
                     Toast.makeText(getContext(), "Заполните все поля", Toast.LENGTH_LONG).show();
                 }

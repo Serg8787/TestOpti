@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_wallet" >
         <action
             android:id="@+id/action_walLetFragment_to_walletAddDealFragment"
-            app:destination="@id/walletAddDealFragment" />
+            app:destination="@id/walletAddDealFragment"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/walletAddDealFragment"
@@ -21,7 +23,9 @@
         tools:layout="@layout/fragment_wallet_add_deal" >
         <action
             android:id="@+id/action_walletAddDealFragment_to_walLetFragment"
-            app:destination="@id/walLetFragment" />
+            app:destination="@id/walLetFragment"
+            app:popUpTo="@id/mapsFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
